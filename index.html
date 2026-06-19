@@ -1,0 +1,30 @@
+# Prepit — PWA (installable web app)
+
+## Try it now
+Open `index.html` in your phone's browser, then:
+
+- **iPhone (Safari):** tap the Share icon → "Add to Home Screen"
+- **Android (Chrome):** tap the ⋮ menu → "Add to Home screen" or "Install app"
+
+It'll then appear as its own app icon and open full-screen, no browser bar.
+
+## To make this live on the internet (so anyone can install it)
+You need to host these files somewhere with HTTPS — service workers and
+install prompts require a secure connection. Easy free options:
+
+- **Netlify** (drag-and-drop this folder at https://app.netlify.com/drop)
+- **GitHub Pages**
+- **Vercel**
+
+Once hosted, share the link — people open it and can install it directly,
+no app store needed.
+
+## What's in this folder
+- `index.html` — the app itself
+- `manifest.json` — tells the browser this is an installable app (name, icon, colors)
+- `sw.js` — service worker, lets the app work offline after the first visit
+- `icons/` — app icons used on the home screen
+
+## Note on data storage
+Saved ideas, meals, and goals are stored in the browser's local storage —
+private to that device and browser. Clearing browser data will erase it.

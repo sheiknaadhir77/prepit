@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prepit</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#33473A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Prepit">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF6EC;
+    --cream-2:#F1EBDC;
+    --forest:#33473A;
+    --forest-2:#4C6552;
+    --sage:#8FAB91;
+    --clay:#DD6B3B;
+    --clay-light:#F6D9C7;
+    --ink:#2B2823;
+    --ink-soft:#6E6A60;
+    --white:#FFFFFF;
+    --line:#E4DCC9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+  }
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:var(--cream);
+    position:relative;
+    padding-bottom:90px;
+  }
+  header.top{
+    position:relative;
+    padding:34px 22px 22px;
+    color:var(--cream);
+    border-radius:0 0 28px 28px;
+    background:
+      linear-gradient(180deg, rgba(33,46,37,0.55) 0%, rgba(33,46,37,0.88) 100%),
+      url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=900&q=80') center/cover;
+    overflow:hidden;
+  }
+  .wordmark{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:30px;
+    letter-spacing:-0.5px;
+    margin:0;
+  }
+  .tagline{
+    margin:5px 0 0;
+    font-size:13.5px;
+    color:var(--clay-light);
+  }
+  .good-vibe{
+    margin:16px 0 0;
+    font-size:12.5px;
+    color:var(--cream);
+    background:rgba(255,255,255,0.14);
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+  }
+  main{padding:18px 18px 0;}
+  .photo-banner{
+    width:100%;
+    height:120px;
+    border-radius:16px;
+    object-fit:cover;
+    margin-bottom:14px;
+    display:block;
+  }
+  .vibe-strip{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--clay-light);
+    border-radius:14px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    font-size:12.5px;
+    color:#7A3517;
+  }
+  .vibe-strip span.em{font-size:16px;}
+  .section{display:none;}
+  .section.active{display:block;}
+  h2.section-title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:19px;
+    margin:4px 0 14px;
+    color:var(--forest);
+  }
+  .card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:14px;
+  }
+  /* --- Saved Ideas --- */
+  .idea-form input, .idea-form textarea{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    margin-bottom:10px;
+    background:var(--cream-2);
+    color:var(--ink);
+  }
+  .idea-form textarea{resize:vertical;min-height:50px;}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    border:none;
+    border-radius:10px;
+    padding:10px 16px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:transform .1s ease;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--clay);color:#fff;width:100%;}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink-soft);}
+  .idea-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:10px;
+    background:var(--white);
+  }
+  .idea-card .src-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+  }
+  .idea-card .platform-tag{
+    font-size:11px;
+    font-weight:600;
+    color:var(--clay);
+    background:var(--clay-light);
+    padding:3px 9px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+  .idea-card a{
+    color:var(--forest-2);
+    font-size:13px;
+    word-break:break-all;
+    text-decoration:none;
+    border-bottom:1px solid var(--sage);
+  }
+  .idea-card .notes{
+    font-size:13.5px;
+    color:var(--ink);
+    margin:8px 0 0;
+    line-height:1.5;
+  }
+  .idea-card .meta{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:8px;
+  }
+  .delete-x{
+    border:none;
+    background:none;
+    color:var(--ink-soft);
+    font-size:16px;
+    cursor:pointer;
+    line-height:1;
+    padding:2px 4px;
+  }
+  .empty{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    padding:28px 10px;
+  }
+  /* --- Calories --- */
+  .ring-wrap{display:flex;flex-direction:column;align-items:center;padding:6px 0 4px;}
+  .ring-num{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:600;
+    fill:var(--forest);
+  }
+  .ring-label{font-size:11px;fill:var(--ink-soft);}
+  .goal-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:6px;
+  }
+  .goal-row input{
+    width:90px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:7px 10px;
+    font-size:13px;
+    background:var(--cream-2);
+  }
+  .goal-row label{font-size:13px;color:var(--ink-soft);}
+  .meal-form{display:flex;gap:8px;margin-bottom:12px;}
+  .meal-form input:first-child{flex:2;}
+  .meal-form input:last-child{flex:1;}
+  .meal-form input{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:9px 11px;
+    font-size:14px;
+    background:var(--cream-2);
+  }
+  .meal-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 2px;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+  }
+  .meal-row:last-child{border-bottom:none;}
+  .meal-row .cal{color:var(--clay);font-weight:600;font-size:13.5px;}
+  /* --- Workouts --- */
+  .filter-row{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    margin-bottom:14px;
+    padding-bottom:2px;
+  }
+  .filter-chip{
+    flex-shrink:0;
+    padding:7px 14px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--white);
+    color:var(--ink-soft);
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .filter-chip.active{
+    background:var(--forest);
+    color:var(--cream);
+    border-color:var(--forest);
+  }
+  .workout-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:10px;
+    background:var(--white);
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .workout-icon{
+    width:38px;height:38px;
+    border-radius:10px;
+    background:var(--cream-2);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .workout-card h3{
+    margin:0 0 3px;
+    font-size:14.5px;
+    font-weight:600;
+  }
+  .workout-card p{
+    margin:0;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+  .workout-card .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;}
+  .workout-card .tags span{
+    font-size:11px;
+    background:var(--cream-2);
+    color:var(--forest-2);
+    padding:2px 8px;
+    border-radius:12px;
+  }
+  /* --- nav --- */
+  nav.tabbar{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:430px;
+    background:var(--white);
+    border-top:1px solid var(--line);
+    display:flex;
+    padding:10px 8px 18px;
+  }
+  nav.tabbar button{
+    flex:1;
+    background:none;
+    border:none;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    color:var(--ink-soft);
+    font-size:11px;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    padding:4px 0;
+  }
+  nav.tabbar button.active{color:var(--clay);}
+  nav.tabbar .ic{font-size:19px;}
+  .sr-only{position:absolute;left:-9999px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <p class="wordmark">prepit</p>
+    <p class="tagline">meal prep & weight loss, sorted</p>
+    <span class="good-vibe">🌿 small steps, every day, count</span>
+  </header>
+
+  <main>
+    <!-- SAVED IDEAS -->
+    <section class="section active" id="ideas">
+      <h2 class="section-title">Saved meal ideas</h2>
+      <img class="photo-banner" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80" alt="Colorful healthy meal prep bowls">
+      <div class="vibe-strip"><span class="em">✨</span>Spot a recipe on Instagram or TikTok? Drop the link here so it doesn't get lost in your saves.</div>
+      <div class="card idea-form">
+        <input type="url" id="ideaLink" placeholder="Paste Instagram or TikTok link">
+        <textarea id="ideaNotes" placeholder="What's the meal? Any notes on ingredients or calories"></textarea>
+        <button class="btn btn-primary" onclick="addIdea()">Save idea</button>
+      </div>
+      <div id="ideaList"></div>
+    </section>
+
+    <!-- CALORIES -->
+    <section class="section" id="calories">
+      <h2 class="section-title">Today's calories</h2>
+      <img class="photo-banner" src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=900&q=80" alt="Fresh healthy ingredients on a table">
+      <div class="card">
+        <div class="ring-wrap">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="68" fill="none" stroke="#F1EBDC" stroke-width="14"/>
+            <circle id="ringProgress" cx="80" cy="80" r="68" fill="none" stroke="#DD6B3B" stroke-width="14" stroke-linecap="round" transform="rotate(-90 80 80)"/>
+            <text x="80" y="78" text-anchor="middle" class="ring-num" id="ringEaten">0</text>
+            <text x="80" y="98" text-anchor="middle" class="ring-label" id="ringGoalText">of 2000 kcal</text>
+          </svg>
+        </div>
+        <div class="goal-row" style="justify-content:center;">
+          <label for="goalInput">Daily goal</label>
+          <input type="number" id="goalInput" placeholder="2000">
+          <button class="btn btn-ghost" onclick="setGoal()">Set</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="meal-form">
+          <input type="text" id="mealName" placeholder="Meal e.g. Chicken bowl">
+          <input type="number" id="mealCal" placeholder="kcal">
+          <button class="btn btn-primary" style="width:auto;padding:9px 14px;" onclick="addMeal()">Add</button>
+        </div>
+        <div id="mealList"></div>
+      </div>
+    </section>
+
+    <!-- WORKOUTS -->
+    <section class="section" id="workouts">
+      <h2 class="section-title">Workout library</h2>
+      <img class="photo-banner" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=900&q=80" alt="People exercising together outdoors">
+      <div class="vibe-strip"><span class="em">💪</span>Consistency beats intensity. Pick one workout today and just start.</div>
+      <div class="filter-row" id="filterRow"></div>
+      <div id="workoutList"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab-btn active" data-tab="ideas" onclick="switchTab('ideas')">
+      <i class="ic">🔖</i><span>Saved</span>
+    </button>
+    <button class="tab-btn" data-tab="calories" onclick="switchTab('calories')">
+      <i class="ic">🍽️</i><span>Calories</span>
+    </button>
+    <button class="tab-btn" data-tab="workouts" onclick="switchTab('workouts')">
+      <i class="ic">🏃</i><span>Workouts</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+/* ---------- TAB SWITCHING ---------- */
+function switchTab(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.tab-btn[data-tab="'+name+'"]').classList.add('active');
+}
+
+/* ---------- STORAGE HELPERS ---------- */
+async function getData(key, fallback){
+  try{
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  }catch(e){
+    return fallback;
+  }
+}
+async function setData(key, value){
+  try{
+    localStorage.setItem(key, JSON.stringify(value));
+  }catch(e){
+    console.error('storage failed', e);
+  }
+}
+
+/* ---------- SAVED IDEAS ---------- */
+let ideas = [];
+
+function detectPlatform(url){
+  if(/instagram\.com/i.test(url)) return 'Instagram';
+  if(/tiktok\.com/i.test(url)) return 'TikTok';
+  if(url) return 'Link';
+  return '';
+}
+
+async function loadIdeas(){
+  ideas = await getData('ideas', []);
+  renderIdeas();
+}
+
+function renderIdeas(){
+  const list = document.getElementById('ideaList');
+  if(ideas.length === 0){
+    list.innerHTML = '<div class="empty">No saved ideas yet.<br>Paste a link above to start your collection 🍓</div>';
+    return;
+  }
+  list.innerHTML = ideas.slice().reverse().map(idea => {
+    const platform = detectPlatform(idea.link);
+    const date = new Date(idea.createdAt).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+    return `
+      <div class="idea-card">
+        <div class="src-row">
+          <div>
+            ${platform ? `<span class="platform-tag">${platform}</span>` : ''}
+            ${idea.link ? `<div style="margin-top:6px;"><a href="${idea.link}" target="_blank" rel="noopener">${idea.link}</a></div>` : ''}
+          </div>
+          <button class="delete-x" aria-label="Delete idea" onclick="deleteIdea('${idea.id}')">✕</button>
+        </div>
+        ${idea.notes ? `<p class="notes">${escapeHtml(idea.notes)}</p>` : ''}
+        <p class="meta">Saved ${date}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function addIdea(){
+  const link = document.getElementById('ideaLink').value.trim();
+  const notes = document.getElementById('ideaNotes').value.trim();
+  if(!link && !notes){
+    alert('Add a link or a note about the meal idea first.');
+    return;
+  }
+  ideas.push({ id: Date.now().toString(), link, notes, createdAt: Date.now() });
+  document.getElementById('ideaLink').value = '';
+  document.getElementById('ideaNotes').value = '';
+  await setData('ideas', ideas);
+  renderIdeas();
+}
+
+async function deleteIdea(id){
+  ideas = ideas.filter(i => i.id !== id);
+  await setData('ideas', ideas);
+  renderIdeas();
+}
+
+/* ---------- CALORIES ---------- */
+let goal = 2000;
+let meals = [];
+let lastDate = '';
+
+function todayKey(){
+  return new Date().toDateString();
+}
+
+async function loadCalorieData(){
+  goal = await getData('calorieGoal', 2000);
+  document.getElementById('goalInput').value = goal;
+
+  lastDate = await getData('mealDate', '');
+  const today = todayKey();
+  if(lastDate !== today){
+    meals = [];
+    await setData('meals', meals);
+    await setData('mealDate', today);
+  } else {
+    meals = await getData('meals', []);
+  }
+  renderMeals();
+  renderRing();
+}
+
+async function setGoal(){
+  const val = parseInt(document.getElementById('goalInput').value);
+  if(!val || val <= 0){ return; }
+  goal = val;
+  await setData('calorieGoal', goal);
+  renderRing();
+}
+
+async function addMeal(){
+  const name = document.getElementById('mealName').value.trim();
+  const cal = parseInt(document.getElementById('mealCal').value);
+  if(!name || !cal || cal <= 0){
+    alert('Add a meal name and calorie amount.');
+    return;
+  }
+  meals.push({ id: Date.now().toString(), name, cal });
+  document.getElementById('mealName').value = '';
+  document.getElementById('mealCal').value = '';
+  await setData('meals', meals);
+  await setData('mealDate', todayKey());
+  renderMeals();
+  renderRing();
+}
+
+async function deleteMeal(id){
+  meals = meals.filter(m => m.id !== id);
+  await setData('meals', meals);
+  renderMeals();
+  renderRing();
+}
+
+function renderMeals(){
+  const list = document.getElementById('mealList');
+  if(meals.length === 0){
+    list.innerHTML = '<div class="empty" style="padding:16px 4px;">No meals logged today.</div>';
+    return;
+  }
+  list.innerHTML = meals.map(m => `
+    <div class="meal-row">
+      <span>${escapeHtml(m.name)}</span>
+      <span style="display:flex;align-items:center;gap:10px;">
+        <span class="cal">${m.cal} kcal</span>
+        <button class="delete-x" aria-label="Delete meal" onclick="deleteMeal('${m.id}')">✕</button>
+      </span>
+    </div>
+  `).join('');
+}
+
+function renderRing(){
+  const eaten = meals.reduce((sum,m)=>sum+m.cal,0);
+  const circumference = 2 * Math.PI * 68;
+  const pct = Math.min(eaten / goal, 1);
+  const offset = circumference * (1 - pct);
+  const ring = document.getElementById('ringProgress');
+  ring.style.strokeDasharray = circumference;
+  ring.style.strokeDashoffset = offset;
+  document.getElementById('ringEaten').textContent = eaten;
+  document.getElementById('ringGoalText').textContent = 'of ' + goal + ' kcal';
+}
+
+/* ---------- WORKOUTS ---------- */
+const workoutData = [
+  { name: 'Brisk walk', cat: 'Cardio', icon:'🚶', desc: '30 min steady pace, great low-impact fat burner.', tags:['Beginner','No equipment'] },
+  { name: 'Jump rope intervals', cat: 'Cardio', icon:'🪢', desc: '20 min, 40s on / 20s off. High calorie burn in short time.', tags:['Intermediate','Equipment: rope'] },
+  { name: 'Stair climbing', cat: 'Cardio', icon:'🏢', desc: '15-20 min continuous climbing, builds endurance fast.', tags:['Intermediate'] },
+  { name: 'Cycling', cat: 'Cardio', icon:'🚴', desc: '30-45 min moderate pace, easy on joints.', tags:['Beginner','Equipment: bike'] },
+  { name: 'Bodyweight squats', cat: 'Strength', icon:'🏋️', desc: '3 sets of 15, builds leg muscle to boost metabolism.', tags:['Beginner','No equipment'] },
+  { name: 'Push-ups', cat: 'Strength', icon:'💪', desc: '3 sets to near-failure, full upper-body strength.', tags:['Beginner','No equipment'] },
+  { name: 'Dumbbell circuit', cat: 'Strength', icon:'🏋️‍♀️', desc: 'Full body, 4 exercises x 3 sets, 45s rest.', tags:['Intermediate','Equipment: dumbbells'] },
+  { name: 'Plank hold', cat: 'Strength', icon:'🧍', desc: '3 x 45s hold, strengthens core for stability.', tags:['Beginner','No equipment'] },
+  { name: 'HIIT circuit', cat: 'HIIT', icon:'🔥', desc: '20 min, burpees / mountain climbers / jump squats. Max calorie burn.', tags:['Advanced','No equipment'] },
+  { name: 'Tabata sprints', cat: 'HIIT', icon:'⚡', desc: '4 min, 20s all-out / 10s rest x8. Short and brutal.', tags:['Advanced'] },
+  { name: 'Yoga flow', cat: 'Recovery', icon:'🧘', desc: '20 min gentle flow, supports mobility and recovery days.', tags:['Beginner','No equipment'] },
+  { name: 'Stretch & mobility', cat: 'Recovery', icon:'🤸', desc: '15 min full-body stretch, keeps you consistent injury-free.', tags:['Beginner'] }
+];
+
+const categories = ['All', 'Cardio', 'Strength', 'HIIT', 'Recovery'];
+let activeFilter = 'All';
+
+function renderFilters(){
+  const row = document.getElementById('filterRow');
+  row.innerHTML = categories.map(c => `
+    <button class="filter-chip ${c===activeFilter?'active':''}" onclick="setFilter('${c}')">${c}</button>
+  `).join('');
+}
+
+function setFilter(cat){
+  activeFilter = cat;
+  renderFilters();
+  renderWorkouts();
+}
+
+function renderWorkouts(){
+  const list = document.getElementById('workoutList');
+  const filtered = activeFilter === 'All' ? workoutData : workoutData.filter(w => w.cat === activeFilter);
+  list.innerHTML = filtered.map(w => `
+    <div class="workout-card">
+      <div class="workout-icon">${w.icon}</div>
+      <div>
+        <h3>${w.name}</h3>
+        <p>${w.desc}</p>
+        <div class="tags">${w.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ---------- INIT ---------- */
+(async function init(){
+  await loadIdeas();
+  await loadCalorieData();
+  renderFilters();
+  renderWorkouts();
+})();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
